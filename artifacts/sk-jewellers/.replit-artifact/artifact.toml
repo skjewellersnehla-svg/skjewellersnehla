@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "SK Jewellers"
+description = "A luxury jewellery storefront for SK Jewellers in Nehla, Bhuna, Fatehabad, Haryana, with multilingual browsing, streamlined ordering, inventory administration, digital billing, and offline PWA support."
+version = "1.0.0"
+id = "artifacts/sk-jewellers"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18258
+
+[services.development]
+run = "pnpm --filter @workspace/sk-jewellers run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sk-jewellers", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/sk-jewellers/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18258"
+BASE_PATH = "/"

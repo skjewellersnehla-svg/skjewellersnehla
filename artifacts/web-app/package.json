@@ -23,10 +23,13 @@
     "@replit/vite-plugin-cartographer": "catalog:",
     "@replit/vite-plugin-dev-banner": "catalog:",
     "@replit/vite-plugin-runtime-error-modal": "catalog:",
+    "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/vite": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.26",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:"

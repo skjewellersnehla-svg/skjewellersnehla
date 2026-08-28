@@ -1,0 +1,20 @@
+{
+  "name": "SK Jewellers",
+  "short_name": "SK Jewellers",
+  "description": "A private jeweller, close to home in Nehla, Haryana.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#11161e",
+  "theme_color": "#cdb575",
+  "lang": "en-IN",
+  "categories": ["shopping", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

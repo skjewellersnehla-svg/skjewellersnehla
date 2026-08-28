@@ -1,12 +1,6 @@
-cd ~/workspace && \
-cat << 'EOF' > artifacts/web-app/src/App.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 export default function App() {
-  const [adminToken, setAdminToken] = useState<string | null>(
-    localStorage.getItem("adminToken")
-  );
-  
   const [activeTab, setActiveTab] = useState("dashboard");
   const [items, setItems] = useState([
     { id: 1, name: "Gold Ring", variety: "22K Plain", category: "Ring", weight: "5g", purity: "22K", price: 35000, stock: "Available" },
@@ -31,14 +25,6 @@ export default function App() {
   const [itemPurity, setItemPurity] = useState("22K");
   const [itemPrice, setItemPrice] = useState("");
 
-  useEffect(() => {
-    if (adminToken) {
-      localStorage.setItem("adminToken", adminToken);
-    } else {
-      localStorage.removeItem("adminToken");
-    }
-  }, [adminToken]);
-
   const handleAddOrder = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || !amount) return;
@@ -58,7 +44,7 @@ export default function App() {
     setCustomerMobile("");
     setCustomerAddress("");
     setAmount(0);
-    alert("Order recorded successfully & saved!");
+    alert("Order recorded successfully!");
   };
 
   const handleAddInventory = (e: React.FormEvent) => {
@@ -86,20 +72,13 @@ export default function App() {
   const cashSales = orders.filter(o => o.paymentMode.includes("Cash")).reduce((sum, o) => sum + o.amount, 0);
   const upiSales = orders.filter(o => o.paymentMode.includes("UPI")).reduce((sum, o) => sum + o.amount, 0);
 
-  if (!adminToken) {
-    return <LoginPage onLogin={setAdminToken} />;
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 via-yellow-50 to-orange-50 text-gray-800 font-sans">
       {/* Header */}
       <header className="bg-amber-900 text-white p-4 shadow-md flex justify-between items-center">
         <div>
-          <h1 className="text-xl font-bold">✨ S.K. Jewellers (नेहला) - Admin Dashboard</h1>
-          <p className="text-xs text-amber-200">Luxury Jewelry Management & 5:00 PM Auto-Update System</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={() => setAdminToken(null)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-semibold">Logout</button>
+          <h1 className="text-xl font-bold">✨ S.K. Jewellers (नेहला) - Direct Dashboard</h1>
+          <p className="text-xs text-amber-200">Luxury Jewelry Management & Billing System</p>
         </div>
       </header>
 
@@ -179,7 +158,7 @@ export default function App() {
             </div>
             <div className="md:col-span-2 flex items-end gap-3">
               <button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold py-3 rounded-lg shadow hover:opacity-90">💾 रिकॉर्ड सेव करें</button>
-              <button type="button" onClick={() => alert("WhatsApp Bill generation link triggered!")} className="w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow hover:bg-green-700">💬 WhatsApp पर बिल भेजें</button>
+              <button type="button" onClick={() => alert("WhatsApp Bill message ready to share!")} className="w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow hover:bg-green-700">💬 WhatsApp पर बिल भेजें</button>
             </div>
           </form>
         </section>
@@ -225,7 +204,7 @@ export default function App() {
           <form onSubmit={handleAddInventory} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 pb-6 border-b">
             <div>
               <label className="text-xs font-semibold text-amber-900">आइटम का नाम</label>
-              <input type="top" placeholder="जैसे: Gold Ring / Bangle" value={itemName} onChange={e => setItemName(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" required />
+              <input type="text" placeholder="जैसे: Gold Ring / Bangle" value={itemName} onChange={e => setItemName(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" required />
             </div>
             <div>
               <label className="text-xs font-semibold text-amber-900">वैरायटी (Variety)</label>
@@ -278,51 +257,3 @@ export default function App() {
     </div>
   );
 }
-
-interface LoginPageProps {
-  onLogin: (token: string) => void;
-}
-
-function LoginPage({ onLogin }: LoginPageProps) {
-  const [phone, setPhone] = useState("");
-  const [pin, setPin] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      onLogin("mock-admin-token-sk-jewellers");
-    }, 600);
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-amber-100">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-amber-900 mb-2">S.K. Jewellers Nehla</h1>
-          <p className="text-sm text-amber-700">Admin Dashboard Login</p>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-amber-900 mb-1">Phone Number</label>
-            <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98961 02704" className="w-full px-4 py-3 border-2 border-amber-200 rounded-lg bg-amber-50" required />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-amber-900 mb-1">PIN</label>
-            <input type="password" value={pin} onChange={(e) => setPin(e.target.value)} placeholder="6-digit PIN" className="w-full px-4 py-3 border-2 border-amber-200 rounded-lg bg-amber-50" required />
-          </div>
-          {error && <div className="bg-red-50 text-red-700 p-3 rounded text-sm">{error}</div>}
-          <button type="submit" disabled={isLoading} className="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:opacity-90">
-            {isLoading ? "Logging in..." : "Login to Dashboard"}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-}
-EOF
-git add . && git commit -m "feat: complete SK Jewellers admin dashboard with inventory and dropdowns" && git push origin main

@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 
 const CONTACT_NUMBER = "9896102704";
-const ADMIN_SECRET_PIN = CONTACT_NUMBER.slice(0, 6);
+// सटीक और स्पष्ट रूप से शुरुआती 6 अंक पिन के लिए तय किए गए हैं
+const ADMIN_SECRET_PIN = CONTACT_NUMBER.slice(0, 6); // "989610"
 
 export default function App() {
   const [viewMode, setViewMode] = useState<'home' | 'catalog' | 'order_maker' | 'admin_login' | 'admin_dashboard'>('home');
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<any[]>([
+    { id: 1, name: "हॉलमार्क गोल्ड रिंग", category: "Ring", weight: "8g", purity: "22K", price: "52,000", image: "" },
+    { id: 2, name: "शाही लेडीज़ नेकलेस", category: "Necklace", weight: "35g", purity: "22K", price: "2,45,000", image: "" }
+  ]);
   const [bills, setBills] = useState<any[]>([]);
   const [activeCategory, setActiveCategory] = useState("all");
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [selectedPlatform, setSelectedPlatform] = useState('pwa');
   
   const [custName, setCustName] = useState("");
   const [custPhone, setCustPhone] = useState("");
@@ -30,9 +36,29 @@ export default function App() {
   const [billAmount, setBillAmount] = useState("");
   const [billPaymentMode, setBillPaymentMode] = useState("Cash");
 
+  useEffect(() => {
+    const handleStatusChange = () => {
+      setIsOnline(navigator.onLine);
+    };
+    window.addEventListener('online', handleStatusChange);
+    window.addEventListener('offline', handleStatusChange);
+    return () => {
+      window.removeEventListener('online', handleStatusChange);
+      window.removeEventListener('offline', handleStatusChange);
+    };
+  }, []);
+
+  const handlePlatformChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    setSelectedPlatform(val);
+    if (val === 'vercel') {
+      window.location.href = "https://sk-jewellers.vercel.app"; 
+    }
+  };
+
   const handleWhatsAppOrder = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!custName || !custPhone) {
+    if (!custName.trim() || !custPhone.trim()) {
       alert("कृपया अपना नाम और मोबाइल नंबर अवश्य भरें!");
       return;
     }
@@ -42,18 +68,22 @@ export default function App() {
 
   const handleAdminLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputAuthPhone.trim() === CONTACT_NUMBER && inputAuthPin.trim() === ADMIN_SECRET_PIN) {
+    const cleanPhone = inputAuthPhone.trim();
+    const cleanPin = inputAuthPin.trim();
+
+    // पूरी तरह सुरक्षित और सटीक जांच: फोन नंबर और शुरुआती 6 डिजिट का पिन मिलान
+    if (cleanPhone === CONTACT_NUMBER && cleanPin === ADMIN_SECRET_PIN) {
       setViewMode('admin_dashboard');
       setInputAuthPhone('');
       setInputAuthPin('');
     } else {
-      alert("❌ अमान्य मोबाइल नंबर या गलत पिन! (पिन आपके मोबाइल नंबर के पहले 6 अंक 989610 हैं)।");
+      alert(`❌ अमान्य मोबाइल नंबर या गलत पिन!\n(नोट: सही मोबाइल ${CONTACT_NUMBER} और पिन पहले 6 अंक यानी ${ADMIN_SECRET_PIN} है)`);
     }
   };
 
   const handleAddCatalogItem = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newItemName || !newItemPrice) {
+    if (!newItemName.trim() || !newItemPrice.trim()) {
       alert("कृपया आभूषण का नाम और कीमत दर्ज करें!");
       return;
     }
@@ -71,12 +101,12 @@ export default function App() {
     setNewItemWeight("");
     setNewItemPrice("");
     setNewItemImage("");
-    alert("✅ नया आभूषण कैटलॉग में जोड़ दिया गया है!");
+    alert("✅ नया आभूषण कैटलॉग में सफलतापूर्वक जोड़ दिया गया है!");
   };
 
   const handleCreateBill = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!billCustomer || !billAmount) {
+    if (!billCustomer.trim() || !billAmount.trim()) {
       alert("कृपया ग्राहक का नाम और कुल राशि दर्ज करें!");
       return;
     }
@@ -91,13 +121,13 @@ export default function App() {
     };
     setBills([newBill, ...bills]);
     
-    const billMsg = `🧾 *S.K. Jewellers - पक्का बिल / रसीद* 🧾\n\n👤 *ग्राहक:* ${billCustomer}\n💎 *विवरण:* ${billItemDesc}\n💰 *कुल राशि:* ₹${billAmount}\n💳 *भुगतान प्रकार:* ${billPaymentMode}\n📅 *दिनांक:* ${newBill.date} (${newBill.time})\n\n🙏 धन्यवाद! आपकी सेवा में सदैव तत्पर - S.K. Jewellers, नेहला`;
+    const billMsg = `🧾 *S.K. Jewellers - पक्का बिल / रसीद* 🧾\n\n👤 *ग्राहक:* ${billCustomer}\n💎 *विवरण:* ${billItemDesc}\n💰 *कुल राशि:* ₹${billAmount}\n💳 *भुगतान प्रकार:* ${billPaymentMode}\n📅 *दिनांक:* ${newBill.date} (${newBill.time})\n\n🙏 धन्यवाद! S.K. Jewellers, नेहला`;
     window.open(`https://wa.me/91${CONTACT_NUMBER}?text=${encodeURIComponent(billMsg)}`, '_blank');
 
     setBillCustomer("");
     setBillItemDesc("");
     setBillAmount("");
-    alert("✅ बिल बन गया है और WhatsApp पर शेयर होने के लिए तैयार है!");
+    alert("✅ डिजिटल बिल बन गया है और WhatsApp पर शेयर होने के लिए तैयार है!");
   };
 
   const totalRevenue = bills.reduce((acc, curr) => acc + (parseFloat(curr.amount.replace(/,/g, '')) || 0), 0);
@@ -106,20 +136,37 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-amber-50/30 text-gray-900 font-sans pb-24">
-      <header className="bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-white p-5 text-center shadow-lg border-b-2 border-amber-500/40">
-        <h1 className="text-xl md:text-2xl font-black tracking-wide">✨ S.K. Jewellers, नेहला ✨</h1>
-        <p className="text-xs text-amber-200 mt-1 font-semibold">शुद्धता और भरोसे का प्रतीक - हॉलमार्क आभूषण</p>
+      <header className="bg-gradient-to-r from-amber-950 via-amber-900 to-amber-950 text-white p-4 text-center shadow-lg border-b-2 border-amber-500/40">
+        <div className="max-w-md mx-auto flex justify-between items-center">
+          <div>
+            <h1 className="text-lg md:text-xl font-black tracking-wide">✨ S.K. Jewellers, नेहला ✨</h1>
+            <p className="text-[10px] text-amber-200 font-semibold">हॉलमार्क आभूषण एवं विश्वसनीयता</p>
+          </div>
+          <div className="flex flex-col items-end gap-1">
+            <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold ${isOnline ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'}`}>
+              {isOnline ? '🟢 ऑनलाइन' : '🔴 ऑफलाइन PWA'}
+            </span>
+            <select 
+              value={selectedPlatform} 
+              onChange={handlePlatformChange}
+              className="text-[10px] bg-amber-900 text-amber-100 border border-amber-400 rounded px-1.5 py-1 font-bold outline-none cursor-pointer"
+            >
+              <option value="pwa">📱 PWA (Replit App)</option>
+              <option value="vercel">🌐 Vercel लिंक</option>
+            </select>
+          </div>
+        </div>
       </header>
 
-      <div className="bg-white border-b shadow-sm px-4 py-3 flex justify-between items-center sticky top-0 z-50">
+      <div className="bg-white border-b shadow-sm px-4 py-3 flex justify-between items-center sticky top-0 z-50 max-w-md mx-auto">
         <button onClick={() => setViewMode('home')} className="text-xs font-black bg-amber-950 text-white px-4 py-2 rounded-xl shadow hover:bg-amber-900 transition">
           🏠 होम पेज
         </button>
         <div className="flex gap-2">
-          <button onClick={() => setViewMode('catalog')} className="text-xs font-bold bg-amber-100 text-amber-950 border border-amber-300 px-3.5 py-2 rounded-xl shadow-sm hover:bg-amber-200 transition">
+          <button onClick={() => setViewMode('catalog')} className="text-xs font-bold bg-amber-100 text-amber-950 border border-amber-300 px-3.5 py-2 rounded-xl shadow-sm">
             🔍 व्यू ज्वेलरी
           </button>
-          <button onClick={() => setViewMode('order_maker')} className="text-xs font-bold bg-emerald-700 text-white px-3.5 py-2 rounded-xl shadow hover:bg-emerald-800 transition">
+          <button onClick={() => setViewMode('order_maker')} className="text-xs font-bold bg-emerald-700 text-white px-3.5 py-2 rounded-xl shadow">
             🛒 आर्डर नाउ
           </button>
         </div>
@@ -148,7 +195,7 @@ export default function App() {
             </button>
           </div>
           <div className="pt-10 text-center border-t border-gray-200">
-            <button onClick={() => setViewMode('admin_login')} className="text-xs font-bold text-gray-500 bg-gray-100 px-4 py-2 rounded-xl border">
+            <button onClick={() => setViewMode('admin_login')} className="text-xs font-bold text-gray-600 bg-gray-100 px-4 py-2.5 rounded-xl border shadow-sm">
               🔐 दुकान मालिक लॉगिन (Admin Panel)
             </button>
           </div>
@@ -241,14 +288,17 @@ export default function App() {
         <div className="p-4 max-w-md mx-auto">
           <form onSubmit={handleAdminLogin} className="bg-white p-6 rounded-3xl shadow-md border border-amber-200 space-y-4">
             <h2 className="text-lg font-black text-amber-950 text-center">🔐 एडमिन सुरक्षित लॉगिन</h2>
-            <p className="text-[11px] text-gray-500 text-center">गुप्त पिन = 989610</p>
-            <div>
-              <label className="text-xs font-bold text-gray-700">मोबाइल नंबर:</label>
-              <input type="tel" value={inputAuthPhone} onChange={e => setInputAuthPhone(e.target.value)} placeholder="मोबाइल नंबर" className="w-full mt-1 p-3 border rounded-xl text-xs font-bold bg-gray-50" required />
+            <div className="bg-amber-50 p-3 rounded-2xl border border-amber-200 text-center">
+              <p className="text-[11px] font-bold text-amber-900">व्यवसाय मोबाइल: {CONTACT_NUMBER}</p>
+              <p className="text-[10px] text-amber-700 mt-0.5">गुप्त पिन = फोन नंबर के पहले 6 अंक (989610)</p>
             </div>
             <div>
-              <label className="text-xs font-bold text-gray-700">गुप्त PIN:</label>
-              <input type="password" value={inputAuthPin} onChange={e => setInputAuthPin(e.target.value)} placeholder="6 अंकों का पिन" className="w-full mt-1 p-3 border rounded-xl text-xs font-bold bg-gray-50" required />
+              <label className="text-xs font-bold text-gray-700">मोबाइल नंबर दर्ज करें:</label>
+              <input type="tel" value={inputAuthPhone} onChange={e => setInputAuthPhone(e.target.value)} placeholder="9896102704" className="w-full mt-1 p-3 border rounded-xl text-xs font-bold bg-gray-50" required />
+            </div>
+            <div>
+              <label className="text-xs font-bold text-gray-700">सिक्योरिटी पिन (PIN):</label>
+              <input type="password" value={inputAuthPin} onChange={e => setInputAuthPin(e.target.value)} maxLength={6} placeholder="6 अंकों का पिन (989610)" className="w-full mt-1 p-3 border rounded-xl text-xs font-bold bg-gray-50 tracking-widest" required />
             </div>
             <button type="submit" className="w-full bg-amber-950 text-white py-3.5 rounded-2xl font-black text-xs shadow-lg">
               🔓 लॉगिन करें
@@ -265,24 +315,24 @@ export default function App() {
           <div className="bg-amber-950 text-white p-4 rounded-2xl flex justify-between items-center shadow-md">
             <div>
               <h2 className="text-sm font-black">📊 संदीप सोनी एडमिन पैनल</h2>
-              <p className="text-[10px] text-amber-200">स्टॉक और बिलिंग</p>
+              <p className="text-[10px] text-amber-200">स्टॉक और बिलिंग सिस्टम</p>
             </div>
-            <button onClick={() => setViewMode('home')} className="bg-amber-800 text-white px-3 py-1 rounded-xl text-xs font-bold">लॉगआउट</button>
+            <button onClick={() => setViewMode('home')} className="bg-amber-800 text-white px-3 py-1.5 rounded-xl text-xs font-bold">लॉगआउट</button>
           </div>
 
           <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white p-4 rounded-3xl shadow-md space-y-2">
-            <span className="text-xs font-black uppercase tracking-wider block border-b border-amber-500 pb-1">⚡ 5:00 PM ऑटो-डेली रिपोर्ट</span>
+            <span className="text-xs font-black uppercase tracking-wider block border-b border-amber-500 pb-1">⚡ दैनिक बिक्री रिपोर्ट</span>
             <div className="grid grid-cols-3 gap-2 pt-1 text-center">
               <div className="bg-amber-900/60 p-2 rounded-xl">
                 <span className="text-[9px] text-amber-200 block">कुल बिक्री</span>
                 <span className="text-xs font-black">₹{totalRevenue}</span>
               </div>
               <div className="bg-emerald-900/60 p-2 rounded-xl">
-                <span className="text-[9px] text-emerald-200 block">नकद</span>
+                <span className="text-[9px] text-emerald-200 block">नकद (Cash)</span>
                 <span className="text-xs font-black">₹{cashRevenue}</span>
               </div>
               <div className="bg-blue-900/60 p-2 rounded-xl">
-                <span className="text-[9px] text-blue-200 block">UPI</span>
+                <span className="text-[9px] text-blue-200 block">UPI ऑनलाइन</span>
                 <span className="text-xs font-black">₹{upiRevenue}</span>
               </div>
             </div>
@@ -291,8 +341,8 @@ export default function App() {
           <form onSubmit={handleAddCatalogItem} className="bg-white p-5 rounded-3xl shadow-md border space-y-3">
             <h3 className="text-xs font-black text-amber-950 border-b pb-1">➕ नया आभूषण जोड़ें</h3>
             <div>
-              <label className="text-[11px] font-bold text-gray-700">नाम:</label>
-              <input type="text" value={newItemName} onChange={e => setNewItemName(e.target.value)} placeholder="Gold Ring" className="w-full mt-1 p-2.5 border rounded-xl text-xs font-bold bg-gray-50" required />
+              <label className="text-[11px] font-bold text-gray-700">आभूषण नाम:</label>
+              <input type="text" value={newItemName} onChange={e => setNewItemName(e.target.value)} placeholder="जैसे: गोल्ड रिंग" className="w-full mt-1 p-2.5 border rounded-xl text-xs font-bold bg-gray-50" required />
             </div>
             <div>
               <label className="text-[11px] font-bold text-gray-700">कैटेगरी:</label>

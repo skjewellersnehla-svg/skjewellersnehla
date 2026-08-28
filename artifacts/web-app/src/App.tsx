@@ -1,75 +1,96 @@
-import React, { useState } from "react";
-import Catalog from "./components/Catalog";
-import AdminAuthModal from "./components/AdminAuthModal";
-import AdminDashboard from "./components/AdminDashboard";
-import { useLocalStorage } from "./hooks/useLocalStorage";
-import type { Item, Order } from "./types";
-import { SHOP_NAME, SHOP_PHONE } from "./utils/whatsapp";
-
-const DEMO_ITEMS: Item[] = [
-  { id: 1, name: "Gold Ring", variety: "22K Plain", category: "Ring", weight: "5g", purity: "22K", price: 35000, stock: "Available" },
-  { id: 2, name: "Gold Necklace", variety: "18K Designer", category: "Necklace", weight: "25g", purity: "18K", price: 175000, stock: "Available" }
-];
+import React, { useState } from 'react';
 
 export default function App() {
-  const [items, setItems] = useLocalStorage<Item[]>("sk_items_v3", DEMO_ITEMS);
-  const [orders, setOrders] = useLocalStorage<Order[]>("sk_orders_v3", []);
-  const [adminOpen, setAdminOpen] = useState(false);
-  const [authenticated, setAuthenticated] = useLocalStorage<boolean>("sk_admin_authed_v3", false);
+  const [activeCategory, setActiveCategory] = useState('all');
 
-  const addItem = (i: Item) => setItems([i, ...items]);
-  const addOrder = (o: Order) => setOrders([o, ...orders]);
+  const products = [
+    { id: 1, name: 'Gold Ring', category: 'Ring', desc: '22K Plain • 5g • 22K', price: '35000', status: 'Available' },
+    { id: 2, name: 'Gold Necklace', category: 'Necklace', desc: '18K Designer • 25g • 18K', price: '175000', status: 'Available' }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-yellow-50 to-orange-50 text-gray-800 font-sans pb-24">
+    <div style={{ backgroundColor: '#ffffff', minHeight: '100vh', fontFamily: 'sans-serif', color: '#333', paddingBottom: '30px' }}>
       {/* Header */}
-      <header className="bg-gradient-to-r from-amber-950 to-amber-900 text-white p-4 shadow-xl sticky top-0 z-30 border-b border-amber-800">
-        <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-base sm:text-lg font-black tracking-wide">✨ {SHOP_NAME}</h1>
-            <p className="text-[11px] text-amber-200 font-bold">संदीप सोनी जी • शुद्धता और विश्वास</p>
-          </div>
-          {authenticated && (
-            <button onClick={() => setAuthenticated(false)} className="text-xs bg-red-700 hover:bg-red-800 text-white px-3.5 py-2 rounded-2xl shadow font-black transition-all">
-              लॉगआउट (Logout)
-            </button>
-          )}
-        </div>
-      </header>
+      <div style={{ backgroundColor: '#1b4d3e', color: '#ffffff', padding: '15px', textAlign: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold' }}>✨ S.K. Jewellers, नेहला ✨</h2>
+        <p style={{ margin: '5px 0 0 0', fontSize: '12px', opacity: 0.9 }}>शुद्धता और भरोसे का प्रतीक - बेहतरीन आभूषणों की विशाल रेंज।</p>
+      </div>
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto py-6 px-4 space-y-6">
-        {!authenticated ? (
-          <Catalog items={items} />
-        ) : (
-          <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-2xl border border-amber-200">
-            <div className="flex justify-between items-center mb-6 pb-3 border-b border-amber-200">
-              <div>
-                <h2 className="text-xl font-black text-amber-950">🛠️ Admin Dashboard</h2>
-                <p className="text-xs text-amber-800 font-bold">संदीप सोनी जी का पैनल (सक्रिय)</p>
-              </div>
-              <span className="text-xs bg-emerald-100 text-emerald-900 px-3 py-1.5 rounded-full font-extrabold shadow-sm">Verified Admin</span>
-            </div>
-            <AdminDashboard items={items} orders={orders} onAddItem={addItem} onAddOrder={addOrder} />
-          </div>
-        )}
-      </main>
+      {/* Quick Action Links */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', margin: '15px 0', fontSize: '14px' }}>
+        <a href="tel:9896102704" style={{ color: '#1b4d3e', textDecoration: 'none', fontWeight: 'bold' }}>📞 Call Now</a>
+        <a href="https://wa.me" style={{ color: '#25D366', textDecoration: 'none', fontWeight: 'bold' }}>💬 WhatsApp</a>
+      </div>
 
-      {/* Footer / Shopkeeper Access Button */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-amber-200 p-3 text-center flex justify-between items-center px-6 z-20 shadow-lg">
-        <span className="text-xs text-gray-600 font-bold">© {SHOP_NAME} | संपर्क: {SHOP_PHONE}</span>
-        {!authenticated && (
-          <button
-            onClick={() => setAdminOpen(true)}
-            className="bg-amber-900 hover:bg-amber-950 text-white text-xs px-4 py-2.5 rounded-2xl shadow-md font-black transition-all"
+      {/* Category Tabs */}
+      <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '0 15px', marginBottom: '20px' }}>
+        {['all', 'Ring', 'Necklace', 'Earrings', 'Bangles'].map((cat) => (
+          <button 
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '20px',
+              border: activeCategory === cat ? 'none' : '1px solid #e0e0e0',
+              backgroundColor: activeCategory === cat ? '#1b4d3e' : '#f5f5f5',
+              color: activeCategory === cat ? '#fff' : '#333',
+              fontSize: '13px',
+              whiteSpace: 'nowrap',
+              cursor: 'pointer'
+            }}
           >
-            🔐 Shopkeeper Access
+            {cat === 'all' ? 'सभी आभूषण' : cat}
           </button>
-        )}
-      </footer>
+        ))}
+      </div>
 
-      {/* Admin Auth Modal */}
-      {adminOpen && <AdminAuthModal onClose={() => setAdminOpen(false)} onSuccess={() => setAuthenticated(true)} />}
+      {/* Section Title */}
+      <div style={{ padding: '0 15px', marginBottom: '15px' }}>
+        <h3 style={{ margin: 0, fontSize: '16px', color: '#1b4d3e' }}>💎 हमारी विशेष ज्वेलरी वैरायटी</h3>
+        <p style={{ margin: '3px 0 0 0', fontSize: '12px', color: '#666' }}>पसंद का आभूषण चुनें, लाइक करें और सीधे WhatsApp पर शेयर करें।</p>
+      </div>
+
+      {/* Product List - Beautiful Cards Like Nursery App */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '15px', padding: '0 15px' }}>
+        {products
+          .filter(p => activeCategory === 'all' || p.category === activeCategory)
+          .map((product) => (
+            <div key={product.id} style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', position: 'relative' }}>
+              
+              {/* Product Label Anchor */}
+              <div style={{ fontSize: '11px', color: '#999', marginBottom: '6px', textAlign: 'right' }}>✨ S.K. Jewellers, नेहला</div>
+              
+              {/* Image Placeholder Frame */}
+              <div style={{ width: '100%', height: '160px', backgroundColor: '#f8fafc', borderRadius: '8px', display: 'flex', alignItems: 'center', justifycenter: 'center', border: '1px dashed #e2e8f0', color: '#94a3b8', fontSize: '13px', marginBottom: '10px' }}>
+                📷 {product.name} की फोटो यहाँ दिखाई देगी
+              </div>
+
+              {/* Tag / Category */}
+              <span style={{ fontSize: '11px', backgroundColor: '#eef2f6', color: '#1b4d3e', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold' }}>{product.category}</span>
+              
+              {/* Product Title & Specs */}
+              <h4 style={{ margin: '8px 0 4px 0', fontSize: '16px', fontWeight: 'bold' }}>{product.name}</h4>
+              <p style={{ margin: '0 0 12px 0', fontSize: '13px', color: '#64748b' }}>{product.desc}</p>
+              
+              {/* Price & Availability Status */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '12px', borderBottom: '1px solid #f1f5f9', marginBottom: '12px' }}>
+                <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#111' }}>₹{parseInt(product.price).toLocaleString('en-IN')}</span>
+                <span style={{ fontSize: '12px', color: '#22c55e', fontWeight: 'bold' }}>● {product.status}</span>
+              </div>
+
+              {/* Action Buttons Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '6px' }}>
+                <button style={{ backgroundColor: '#1b4d3e', color: '#fff', border: 'none', padding: '8px', borderRadius: '6px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}>🟢 Details</button>
+                <button style={{ backgroundColor: '#25D366', color: '#fff', border: 'none', padding: '8px', borderRadius: '6px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}>💬 WhatsApp</button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                <button style={{ backgroundColor: '#f1f5f9', color: '#64748b', border: 'none', padding: '6px', borderRadius: '6px', fontSize: '12px', cursor: 'pointer' }}>🤍 Like</button>
+                <button style={{ backgroundColor: '#f1f5f9', color: '#64748b', border: 'none', padding: '6px', borderRadius: '6px', fontSize: '12px', cursor: 'pointer' }}>📢 Share</button>
+              </div>
+
+            </div>
+          ))}
+      </div>
     </div>
   );
 }

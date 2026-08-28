@@ -1,259 +1,71 @@
 import React, { useState } from "react";
+import Catalog from "./components/Catalog";
+import AdminAuthModal from "./components/AdminAuthModal";
+import AdminDashboard from "./components/AdminDashboard";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import type { Item, Order } from "./types";
+
+const DEMO_ITEMS: Item[] = [
+  { id: 1, name: "Gold Ring", variety: "22K Plain", category: "Ring", weight: "5g", purity: "22K", price: 35000, stock: "Available" },
+  { id: 2, name: "Gold Necklace", variety: "18K Designer", category: "Necklace", weight: "25g", purity: "18K", price: 175000, stock: "Available" }
+];
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("dashboard");
-  const [items, setItems] = useState([
-    { id: 1, name: "Gold Ring", variety: "22K Plain", category: "Ring", weight: "5g", purity: "22K", price: 35000, stock: "Available" },
-    { id: 2, name: "Gold Necklace", variety: "18K Designer", category: "Necklace", weight: "25g", purity: "18K", price: 175000, stock: "Available" }
-  ]);
-  const [orders, setOrders] = useState([]);
+  const [items, setItems] = useLocalStorage<Item[]>("sk_items_v2", DEMO_ITEMS);
+  const [orders, setOrders] = useLocalStorage<Order[]>("sk_orders_v2", []);
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [authenticated, setAuthenticated] = useLocalStorage<boolean>("sk_admin_authed", false);
 
-  // Form states for New Order
-  const [customerName, setCustomerName] = useState("");
-  const [customerMobile, setCustomerMobile] = useState("");
-  const [customerAddress, setCustomerAddress] = useState("");
-  const [selectedItem, setSelectedItem] = useState("");
-  const [quantity, setQuantity] = useState(1);
-  const [amount, setAmount] = useState(0);
-  const [paymentMode, setPaymentMode] = useState("Cash (नकद)");
-
-  // Form states for New Inventory Item
-  const [itemName, setItemName] = useState("");
-  const [itemVariety, setItemVariety] = useState("");
-  const [itemCategory, setItemCategory] = useState("Ring");
-  const [itemWeight, setItemWeight] = useState("");
-  const [itemPurity, setItemPurity] = useState("22K");
-  const [itemPrice, setItemPrice] = useState("");
-
-  const handleAddOrder = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!customerName || !amount) return;
-    const newOrder = {
-      id: Date.now(),
-      customerName,
-      customerMobile,
-      customerAddress,
-      item: selectedItem || "General Jewellery",
-      quantity,
-      amount: Number(amount),
-      paymentMode,
-      time: new Date().toLocaleTimeString()
-    };
-    setOrders([newOrder, ...orders]);
-    setCustomerName("");
-    setCustomerMobile("");
-    setCustomerAddress("");
-    setAmount(0);
-    alert("Order recorded successfully!");
-  };
-
-  const handleAddInventory = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!itemName || !itemPrice) return;
-    const newItem = {
-      id: Date.now(),
-      name: itemName,
-      variety: itemVariety || "Standard",
-      category: itemCategory,
-      weight: itemWeight || "10g",
-      purity: itemPurity,
-      price: Number(itemPrice),
-      stock: "Available"
-    };
-    setItems([newItem, ...items]);
-    setItemName("");
-    setItemVariety("");
-    setItemWeight("");
-    setItemPrice("");
-    alert("New Jewellery variety added to catalog!");
-  };
-
-  const totalSales = orders.reduce((sum, o) => sum + o.amount, 0);
-  const cashSales = orders.filter(o => o.paymentMode.includes("Cash")).reduce((sum, o) => sum + o.amount, 0);
-  const upiSales = orders.filter(o => o.paymentMode.includes("UPI")).reduce((sum, o) => sum + o.amount, 0);
+  const addItem = (i: Item) => setItems([i, ...items]);
+  const addOrder = (o: Order) => setOrders([o, ...orders]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-yellow-50 to-orange-50 text-gray-800 font-sans">
-      {/* Header */}
-      <header className="bg-amber-900 text-white p-4 shadow-md flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-bold">✨ S.K. Jewellers (नेहला) - Direct Dashboard</h1>
-          <p className="text-xs text-amber-200">Luxury Jewelry Management & Billing System</p>
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-yellow-50 to-orange-50 text-gray-800 font-sans pb-16">
+      {/* Customer Header */}
+      <header className="bg-amber-950 text-white p-4 shadow-lg sticky top-0 z-30">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
+          <div>
+            <h1 className="text-lg font-extrabold tracking-wide">✨ S.K. Jewellers, नेहला</h1>
+            <p className="text-xs text-amber-200">सुंदर डिज़ाइन और भरोसेमंद आभूषण</p>
+          </div>
+          {authenticated && (
+            <button onClick={() => setAuthenticated(false)} className="text-xs bg-red-700 hover:bg-red-800 text-white px-3 py-1.5 rounded-lg shadow font-medium">
+              लॉक करें (Logout)
+            </button>
+          )}
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-7xl space-y-12">
-        {/* Live Metrics */}
-        <section>
-          <h2 className="text-2xl font-bold text-amber-900 mb-6">📊 Live Sales & Metrics</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-white p-4 rounded-xl shadow border-l-4 border-amber-600">
-              <p className="text-xs text-gray-500">आज कुल बिका सामान</p>
-              <h3 className="text-2xl font-bold text-amber-900">{orders.length}</h3>
+      {/* Main Content: Dual View */}
+      <main className="max-w-4xl mx-auto py-6 px-4 space-y-8">
+        {!authenticated ? (
+          <Catalog items={items} />
+        ) : (
+          <div className="bg-white p-6 rounded-2xl shadow-xl border border-amber-200">
+            <div className="flex justify-between items-center mb-6 pb-3 border-b border-amber-100">
+              <h2 className="text-xl font-bold text-amber-900">🛠️ एडमिन डैशबोर्ड (सक्रिय)</h2>
+              <span className="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold">Verified Admin</span>
             </div>
-            <div className="bg-white p-4 rounded-xl shadow border-l-4 border-blue-600">
-              <p className="text-xs text-gray-500">आज कुल Orders</p>
-              <h3 className="text-2xl font-bold text-blue-900">{orders.length}</h3>
-            </div>
-            <div className="bg-white p-4 rounded-xl shadow border-l-4 border-emerald-600">
-              <p className="text-xs text-gray-500">आज के Customers</p>
-              <h3 className="text-2xl font-bold text-emerald-900">{new Set(orders.map(o => o.customerMobile)).size}</h3>
-            </div>
-            <div className="bg-white p-4 rounded-xl shadow border-l-4 border-purple-600">
-              <p className="text-xs text-gray-500">आज की कुल बिक्री</p>
-              <h3 className="text-2xl font-bold text-purple-900">₹{totalSales}</h3>
-            </div>
+            <AdminDashboard items={items} orders={orders} onAddItem={addItem} onAddOrder={addOrder} />
           </div>
-        </section>
-
-        {/* Payment Breakdown */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white p-5 rounded-xl shadow border border-amber-200">
-            <p className="text-sm font-semibold text-gray-600">💵 Cash Payment (नकद बिक्री)</p>
-            <h3 className="text-3xl font-bold text-emerald-700 mt-1">₹{cashSales}</h3>
-          </div>
-          <div className="bg-white p-5 rounded-xl shadow border border-amber-200">
-            <p className="text-sm font-semibold text-gray-600">📱 UPI Payment (ऑनलाइन बिक्री)</p>
-            <h3 className="text-3xl font-bold text-blue-700 mt-1">₹{upiSales}</h3>
-          </div>
-        </section>
-
-        {/* Billing & WhatsApp Module */}
-        <section className="bg-white p-6 rounded-2xl shadow-xl border border-amber-100">
-          <h2 className="text-2xl font-bold text-amber-900 mb-6">📝 नया ऑर्डर / बिलिंग & WhatsApp शेयर</h2>
-          <form onSubmit={handleAddOrder} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="text-xs font-semibold text-amber-900">कस्टमर का नाम</label>
-              <input type="text" placeholder="जैसे: रमेश कुमार" value={customerName} onChange={e => setCustomerName(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" required />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">मोबाइल नंबर</label>
-              <input type="tel" placeholder="10 अंकों का मोबाइल" value={customerMobile} onChange={e => setCustomerMobile(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">पता (Address)</label>
-              <input type="text" placeholder="गाँव / शहर" value={customerAddress} onChange={e => setCustomerAddress(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">ज्वेलरी आइटम चुनें (Drop-down)</label>
-              <select value={selectedItem} onChange={e => setSelectedItem(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1">
-                <option value="">-- आइटम चुनें --</option>
-                {items.map(i => <option key={i.id} value={i.name}>{i.name} ({i.variety} - {i.weight} - {i.purity})</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">मात्रा (Quantity)</label>
-              <input type="number" min="1" value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">कुल राशि (Amount in ₹)</label>
-              <input type="number" placeholder="जैसे: 45000" value={amount} onChange={e => setAmount(Number(e.target.value))} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" required />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">पेमेंट का तरीका (Payment Mode)</label>
-              <select value={paymentMode} onChange={e => setPaymentMode(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1">
-                <option value="Cash (नकद)">💵 Cash (नकद)</option>
-                <option value="UPI (ऑनलाइन)">📱 UPI (ऑनलाइन)</option>
-              </select>
-            </div>
-            <div className="md:col-span-2 flex items-end gap-3">
-              <button type="submit" className="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold py-3 rounded-lg shadow hover:opacity-90">💾 रिकॉर्ड सेव करें</button>
-              <button type="button" onClick={() => alert("WhatsApp Bill message ready to share!")} className="w-full bg-green-600 text-white font-bold py-3 rounded-lg shadow hover:bg-green-700">💬 WhatsApp पर बिल भेजें</button>
-            </div>
-          </form>
-        </section>
-
-        {/* Orders Table */}
-        <section className="bg-white p-6 rounded-2xl shadow-xl border border-amber-100 overflow-x-auto">
-          <h3 className="text-xl font-bold text-amber-900 mb-4">📋 आज के Customer Orders</h3>
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b bg-amber-50 text-amber-900">
-                <th className="p-3">Customer</th>
-                <th className="p-3">Mobile / Address</th>
-                <th className="p-3">Item / Details</th>
-                <th className="p-3">Qty</th>
-                <th className="p-3">Payment</th>
-                <th className="p-3">Total</th>
-                <th className="p-3">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.length === 0 ? (
-                <tr><td colSpan="7" className="p-6 text-center text-gray-400">आज अभी कोई order दर्ज नहीं किया गया है।</td></tr>
-              ) : (
-                orders.map(o => (
-                  <tr key={o.id} className="border-b hover:bg-gray-50">
-                    <td className="p-3 font-semibold">{o.customerName}</td>
-                    <td className="p-3 text-gray-600">{o.customerMobile}</td>
-                    <td className="p-3">{o.item}</td>
-                    <td className="p-3">{o.quantity}</td>
-                    <td className="p-3">{o.paymentMode}</td>
-                    <td className="p-3 font-bold text-amber-800">₹{o.amount}</td>
-                    <td className="p-3 text-xs text-gray-500">{o.time}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </section>
-
-        {/* Inventory Section */}
-        <section className="bg-white p-6 rounded-2xl shadow-xl border border-amber-100">
-          <h2 className="text-2xl font-bold text-amber-900 mb-6">💎 नई ज्वेलरी वैरायटी कैटलॉग में जोड़ें</h2>
-          <form onSubmit={handleAddInventory} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 pb-6 border-b">
-            <div>
-              <label className="text-xs font-semibold text-amber-900">आइटम का नाम</label>
-              <input type="text" placeholder="जैसे: Gold Ring / Bangle" value={itemName} onChange={e => setItemName(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" required />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">वैरायटी (Variety)</label>
-              <input type="text" placeholder="जैसे: 22K Hallmarked" value={itemVariety} onChange={e => setItemVariety(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">कैटेगरी (Category)</label>
-              <select value={itemCategory} onChange={e => setItemCategory(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1">
-                <option value="Ring">Ring (अंगूठी)</option>
-                <option value="Necklace">Necklace (हार)</option>
-                <option value="Earrings">Earrings (झुमके)</option>
-                <option value="Bangles">Bangles (कंगन)</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">वजन (Weight)</label>
-              <input type="text" placeholder="जैसे: 10g" value={itemWeight} onChange={e => setItemWeight(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" />
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">कैरेट / शुद्धता (Purity)</label>
-              <select value={itemPurity} onChange={e => setItemPurity(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1">
-                <option value="22K">22K Gold</option>
-                <option value="18K">18K Gold</option>
-                <option value="916">916 BIS</option>
-                <option value="Silver">Silver</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-amber-900">कीमत (Price in ₹)</label>
-              <input type="number" placeholder="जैसे: 55000" value={itemPrice} onChange={e => setItemPrice(e.target.value)} className="w-full border-2 border-amber-200 p-2.5 rounded-lg mt-1" required />
-            </div>
-            <div className="md:col-span-3">
-              <button type="submit" className="bg-amber-800 hover:bg-amber-900 text-white font-bold px-6 py-3 rounded-lg shadow">➕ कैटलॉग में सेव करें</button>
-            </div>
-          </form>
-
-          <h3 className="text-xl font-bold text-amber-900 mb-4">📦 वर्तमान स्टॉक और वैरायटी लिस्ट</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {items.map(i => (
-              <div key={i.id} className="border-2 border-amber-100 p-4 rounded-xl bg-amber-50/50 shadow-sm">
-                <h4 className="font-bold text-lg text-amber-900">{i.name}</h4>
-                <p className="text-xs text-gray-600 mt-1">Variety: {i.variety} | Category: {i.category}</p>
-                <p className="text-xs text-gray-600">Weight: {i.weight} | Purity: {i.purity}</p>
-                <p className="text-amber-800 font-bold text-lg mt-2">₹{i.price}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+        )}
       </main>
+
+      {/* Footer with Discreet Admin Access */}
+      <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur border-t border-amber-200 p-2 text-center flex justify-center items-center gap-4 z-20 shadow-lg">
+        <span className="text-xs text-gray-600 font-medium">© S.K. Jewellers Nehla</span>
+        {!authenticated && (
+          <button
+            onClick={() => setAdminOpen(true)}
+            className="bg-amber-900 hover:bg-amber-950 text-white text-xs px-3 py-1.5 rounded-lg shadow font-semibold"
+          >
+            🔐 Shopkeeper Access
+          </button>
+        )}
+      </footer>
+
+      {/* Admin Login Modal */}
+      {adminOpen && <AdminAuthModal onClose={() => setAdminOpen(false)} onSuccess={() => setAuthenticated(true)} />}
     </div>
   );
 }

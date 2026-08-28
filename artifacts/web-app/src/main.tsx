@@ -1,23 +1,22 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import "./index.css";
+import App from "./App";
 
-function App() {
-  return (
-    <main className="legacy-shell">
-      <p className="eyebrow">SK Jewellers · Nehla</p>
-      <h1>Jewellery for your chapter.</h1>
-      <p className="body">
-        Please use the current SK Jewellers storefront for the complete
-        catalogue and enquiry experience.
-      </p>
-      <a href="/">Open storefront</a>
-    </main>
-  );
-}
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 10, // 10 minutes
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </StrictMode>,
 );

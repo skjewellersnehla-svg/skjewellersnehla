@@ -1,20 +1,19 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import devBanner from "@replit/vite-plugin-dev-banner";
+import { devBanner } from "@replit/vite-plugin-dev-banner";
 import runtimeError from "@replit/vite-plugin-runtime-error-modal";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     tailwindcss(),
     react(),
-    devBanner(),
-    runtimeError(),
+    ...(command === "serve" ? [devBanner(), runtimeError()] : []),
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
   server: {
@@ -25,4 +24,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

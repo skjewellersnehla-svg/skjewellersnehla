@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "baseUrl": ".",
+    "lib": ["dom", "dom.iterable", "es2022"],
     "paths": {
       "@/*": ["./src/*"]
     }

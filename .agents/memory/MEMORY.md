@@ -1,0 +1,1 @@
+- [Artifact startup compatibility](artifact-startup-compatibility.md) — Bundled API services need callable default imports for CommonJS middleware, and managed Vite configs must keep plugin arrays syntactically valid.

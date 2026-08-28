@@ -1,0 +1,57 @@
+:root {
+  color: #efe4c4;
+  background: #11161e;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+.legacy-shell {
+  display: grid;
+  min-height: 100vh;
+  place-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  background: radial-gradient(circle at top, #202b3b, #11161e 55%);
+}
+
+.eyebrow {
+  margin: 0;
+  color: #cdb575;
+  font: 0.7rem/1.4 monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 42rem;
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  line-height: 0.95;
+  font-weight: 400;
+}
+
+.body {
+  max-width: 32rem;
+  color: #98a4b5;
+  font-family: system-ui, sans-serif;
+  line-height: 1.7;
+}
+
+a {
+  width: fit-content;
+  padding: 0.85rem 1.1rem;
+  color: #17140e;
+  background: #cdb575;
+  font: 700 0.7rem/1 monospace;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}

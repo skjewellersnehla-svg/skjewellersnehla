@@ -283,7 +283,7 @@ export default function App() {
                 <label className="block text-xs font-bold text-gray-700 mb-1">फोटो अपलोड करें (Upload Image)</label>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image"
                   onChange={handleImageUpload}
                   className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-700 hover:file:bg-amber-200"
                 />

@@ -12,18 +12,38 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="SK Jewellers" />
     <meta name="twitter:description" content="A private jeweller, close to home. Discover SK Jewellers' considered collection from Nehla, Haryana." />
-    <meta name="theme-color" content="#11161e" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 💎 फ़िक्स: टूटे हुए बटनों और कलर्स को जोड़ने के लिए मुख्य CSS लिंक -->
+    <link rel="stylesheet" href="/src/index.css" />
   </head>
   <body>
+    <!-- 🌐 मल्टी-लैंग्वेज ड्रॉपडाउन: यह वेबसाइट के सबसे ऊपर भाषा बदलने का विकल्प देगा -->
+    <div style="position: absolute; top: 10px; right: 10px; z-index: 9999;">
+      <div id="google_translate_element"></div>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- 🌐 गूगल ट्रांसलेट स्क्रिप्ट: ऐप को मल्टी-लैंग्वेज बनाने के लिए -->
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'hi',
+          includedLanguages: 'hi,en,pa,gu,mr,ta,te',
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="//://google.com"></script>
   </body>
 </html>

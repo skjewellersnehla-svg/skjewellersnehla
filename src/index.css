@@ -2,59 +2,82 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 📱 पूरे ऐप का बैकग्राउंड नर्सरी ऐप जैसा प्योर व्हाइट */
 body, html, #root, .app-container {
   background-color: #ffffff !important;
   color: #111827 !important;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+/* 👑 मुख्य हेडिंग और स्वागत पट्टी */
 h1, .main-heading {
   color: #b45309 !important;
   text-shadow: 0px 1px 2px rgba(180, 83, 9, 0.2) !important;
 }
 
-button, .btn, [role="button"] {
-  padding: 14px 28px !important;
+/* 💎 बटनों का बेस डिज़ाइन - नर्सरी ऐप जैसी शानदार फिनिशिंग */
+button, .btn, [role="button"], .button-premium {
+  padding: 12px 24px !important;
   font-size: 16px !important;
   font-weight: 700 !important;
   border-radius: 12px !important;
-  min-height: 50px !important;
+  min-height: 48px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  box-shadow: 0 4px 10px rgba(180, 83, 9, 0.15) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
   transition: all 0.2s ease-in-out !important;
   color: #ffffff !important;
-  border: 1px solid rgba(217, 119, 6, 0.3) !important;
+  border: none !important;
+  cursor: pointer !important;
 }
 
-button:hover, .btn:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 12px 20px rgba(180, 83, 9, 0.3) !important;
+button:hover, .btn:hover, .button-premium:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15) !important;
+  filter: brightness(1.1) !important;
 }
 
-button:contains("ज्वेलरी"), button:contains("Jewellery"), button:contains("catalogue"), [class*="view"] {
-  background: linear-gradient(135deg, #781a1a, #991b1b) !important;
-  border: 1px solid #f59e0b !important;
+/* 🎨 ऐक्शन के हिसाब से बटनों के कड़क और चमकदार कलर्स */
+
+/* WhatsApp / वॉट्सऐप बटन (कड़क ओरिजिनल ग्रीन) */
+.btn-whatsapp, button[class*="green"], [class*="whatsapp"] {
+  background: #22c55e !important;
 }
 
-button:contains("कॉल"), button:contains("Call"), [class*="call"], [class*="phone"] {
-  background: linear-gradient(135deg, #0f172a, #1e3a8a) !important;
+/* Call / कॉल करें बटन (शाही रॉयल ब्लू) */
+.btn-call, button[class*="blue"], [class*="call"], [class*="phone"] {
+  background: #1e40af !important;
 }
 
-button:contains("WhatsApp"), button:contains("whatsapp"), [class*="whatsapp"] {
-  background: linear-gradient(135deg, #15803d, #16a34a) !important;
+/* Order / आर्डर नाऊ बटन (आकर्षक कड़क संतरी) */
+.btn-order, button[class*="orange"], [class*="order"], [class*="cart"] {
+  background: #f97316 !important;
 }
 
-button:contains("आर्डर"), button:contains("Order"), [class*="order"], [class*="cart"] {
-  background: linear-gradient(135deg, #d97706, #b45309) !important;
+/* View Jewellery / कैटलॉग देखें बटन (लग्जरी शोरूम पर्पल) */
+.btn-catalog, button[class*="purple"], [class*="view"], [class*="catalog"] {
+  background: #7e22ce !important;
 }
 
+/* Admin Panel / रिकॉर्ड सेव बटन (सक्सेस ग्रीन) */
+.btn-admin, [class*="admin"] {
+  background: #16a34a !important;
+}
+
+/* 📱 प्रीमियम इनपुट बॉक्सेस और ड्रॉपडाउन */
 input, select, textarea {
   padding: 12px 16px !important;
   font-size: 16px !important;
   border-radius: 10px !important;
-  border: 1px solid #d97706 !important;
-  background-color: #fffaf0 !important;
+  border: 1px solid #d1d5db !important;
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+input:focus, select:focus {
+  border-color: #b45309 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.1) !important;
 }

@@ -168,12 +168,12 @@ export default function App() {
     <div className="min-h-screen bg-white text-gray-900 font-sans">
       <Toaster position="top-center" richColors />
 
-      
+      {/* Top Announcement Bar */}
       <div className="bg-gradient-to-r from-amber-700 to-amber-900 text-white text-center py-2 px-4 text-sm font-medium shadow-sm">
         <span>{t.tagline}</span>
       </div>
 
-      
+      {/* Header Setup */}
       <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -182,7 +182,6 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-4">
-            
             <div className="relative">
               <select
                 value={lang}
@@ -197,20 +196,20 @@ export default function App() {
         </div>
       </header>
 
-      
+      {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-8">
         
-        
-        <div className="bg-amber-50/50 border border-amber-100 rounded-2xl p-6 text-center space-y-4">
+        {/* Hero Banner Section */}
+        <div className="bg-amber-50/50 border border-amber-100 rounded-2xl p-6 text-center space-y-4 shadow-sm">
           <h2 className="text-xl md:text-2xl font-extrabold text-amber-800">{t.welcome}</h2>
           <p className="text-gray-700 font-medium max-w-2xl mx-auto text-sm md:text-base">{t.desc}</p>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <a href="tel:+919896102764" className="btn button-premium btn-call w-full sm:w-auto">{t.callBtn}</a>
-            <a href="https://wa.me/919896102764" target="_blank" rel="noopener noreferrer" className="btn button-premium btn-whatsapp w-full sm:w-auto">{t.whatsappBtn}</a>
+            <a href="tel:+919896102764" className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-3 rounded-xl shadow transition text-base w-full sm:w-auto text-center">{t.callBtn}</a>
+            <a href="https://wa.me/919896102764" target="_blank" rel="noopener noreferrer" className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-xl shadow transition text-base w-full sm:w-auto text-center">{t.whatsappBtn}</a>
           </div>
         </div>
 
-        
+        {/* Admin Section Toggle / Status */}
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           {!isAdmin ? (
             <form onSubmit={handleAdminLogin} className="flex items-center gap-2 w-full sm:w-auto">
@@ -219,7 +218,7 @@ export default function App() {
                 placeholder={t.adminPlaceholder}
                 value={adminPin}
                 onChange={(e) => setAdminPin(e.target.value)}
-                className="px-3 py-2 border rounded-lg text-sm w-full sm:w-48"
+                className="px-3 py-2 border rounded-lg text-sm w-full sm:w-48 bg-white"
               />
               <button type="submit" className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm whitespace-nowrap">
                 {t.loginBtn}
@@ -231,14 +230,14 @@ export default function App() {
                 <h3 className="font-bold text-amber-800 text-base">{t.adminActive}</h3>
                 <p className="text-xs text-gray-600">कुल जोड़ी गई ज्वेलरी: <span className="font-bold text-amber-700">{items.length}</span></p>
               </div>
-              <button onClick={() => setIsAdmin(false)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1">
+              <button onClick={() => setIsAdmin(false)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1 shadow">
                 <LogOut className="w-4 h-4" /> {t.logoutBtn}
               </button>
             </div>
           )}
         </div>
 
-        
+        {/* Admin Dashboard Add/Edit Form */}
         {isAdmin && (
           <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 shadow-md space-y-4">
             <h3 className="text-lg font-bold text-amber-900 flex items-center gap-2">
@@ -283,7 +282,7 @@ export default function App() {
                 <label className="block text-xs font-bold text-gray-700 mb-1">फोटो अपलोड करें (Upload Image)</label>
                 <input
                   type="file"
-                  accept="image"
+                  accept="image/*"
                   onChange={handleImageUpload}
                   className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-700 hover:file:bg-amber-200"
                 />
@@ -302,7 +301,7 @@ export default function App() {
           </div>
         )}
 
-        
+        {/* Catalog Grid Section */}
         <div className="space-y-4">
           <h3 className="text-xl font-bold text-gray-800 border-b pb-2 flex items-center gap-2">
             💎 {lang === 'English' ? 'Our Exclusive Designs' : 'हमारे विशेष आभूषण डिज़ाइन'}
@@ -321,17 +320,16 @@ export default function App() {
                   <h4 className="font-bold text-gray-800 line-clamp-2">{item.name}</h4>
                   <p className="text-amber-700 font-bold text-sm">💰 {item.price}</p>
 
-                  
                   <div className="flex gap-2 pt-2">
-                    <button onClick={() => sendWhatsAppBill(item)} className="btn button-premium btn-whatsapp flex-1 text-xs py-2">
-                      💬 WhatsApp बिल
+                    <button onClick={() => sendWhatsAppBill(item)} className="bg-green-600 hover:bg-green-700 text-white font-bold px-3 py-2 rounded-lg text-xs flex items-center justify-center gap-1 shadow flex-1">
+                      <MessageCircle className="w-4 h-4" /> WhatsApp बिल
                     </button>
                     {isAdmin && (
                       <>
-                        <button onClick={() => handleEditItem(item)} className="bg-blue-50 text-blue-600 hover:bg-blue-100 p-2 rounded-lg text-xs font-bold flex items-center justify-center" title="Edit">
+                        <button onClick={() => handleEditItem(item)} className="bg-blue-50 text-blue-600 hover:bg-blue-100 p-2 rounded-lg text-xs font-bold flex items-center justify-center shadow" title="Edit">
                           <Edit3 className="w-4 h-4" />
                         </button>
-                        <button onClick={() => handleDeleteItem(item.id)} className="bg-red-50 text-red-600 hover:bg-red-100 p-2 rounded-lg text-xs font-bold flex items-center justify-center" title="Delete">
+                        <button onClick={() => handleDeleteItem(item.id)} className="bg-red-50 text-red-600 hover:bg-red-100 p-2 rounded-lg text-xs font-bold flex items-center justify-center shadow" title="Delete">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </>
@@ -345,7 +343,7 @@ export default function App() {
 
       </main>
 
-      
+      {/* Footer */}
       <footer className="bg-amber-900 text-white text-center py-6 mt-12 text-sm space-y-1">
         <p>© S.K. Jewellers, नेहला (फतेहाबाद)</p>
         <p className="text-amber-200 text-xs">✨ शुद्धता, पक्का बिल और ग्राहकों का अटूट विश्वास ✨</p>

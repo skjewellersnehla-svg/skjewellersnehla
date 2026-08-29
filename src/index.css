@@ -8,16 +8,28 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* कती बड़े, साफ और आसानी से क्लिक होने वाले बटन */
-button, .btn, input, select {
-  padding: 14px 20px !important;
+/* 💎 प्रीमियम और बड़े बटन स्टाइल - ऑल इन वन */
+button, .btn, input[type="button"], input[type="submit"] {
+  padding: 14px 28px !important;
   font-size: 18px !important;
-  font-weight: 600 !important;
-  border-radius: 10px !important;
-  min-height: 48px;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  min-height: 52px !important;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  transition: all 0.2s ease-in-out !important;
 }
 
-/* कार्ड और पूरी स्क्रीन को साफ सफेद रखना */
-div, section, main, header {
-  background-color: #ffffff;
+button:hover, .btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  filter: brightness(1.1);
+}
+
+/* 📱 इनपुट बॉक्स और ड्रापडाउन को भी प्रीमियम लुक */
+input, select, textarea {
+  padding: 12px 16px !important;
+  font-size: 16px !important;
+  border-radius: 10px !important;
+  border: 1px solid #d1d5db !important;
 }

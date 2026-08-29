@@ -168,12 +168,10 @@ export default function App() {
     <div className="min-h-screen bg-white text-gray-900 font-sans">
       <Toaster position="top-center" richColors />
 
-      {/* Top Announcement Bar */}
       <div className="bg-gradient-to-r from-amber-700 to-amber-900 text-white text-center py-2 px-4 text-sm font-medium shadow-sm">
         <span>{t.tagline}</span>
       </div>
 
-      {/* Header Setup */}
       <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -196,10 +194,8 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 py-6 space-y-8">
         
-        {/* Hero Banner Section */}
         <div className="bg-amber-50/50 border border-amber-100 rounded-2xl p-6 text-center space-y-4 shadow-sm">
           <h2 className="text-xl md:text-2xl font-extrabold text-amber-800">{t.welcome}</h2>
           <p className="text-gray-700 font-medium max-w-2xl mx-auto text-sm md:text-base">{t.desc}</p>
@@ -209,7 +205,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Admin Section Toggle / Status */}
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           {!isAdmin ? (
             <form onSubmit={handleAdminLogin} className="flex items-center gap-2 w-full sm:w-auto">
@@ -237,7 +232,6 @@ export default function App() {
           )}
         </div>
 
-        {/* Admin Dashboard Add/Edit Form */}
         {isAdmin && (
           <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 shadow-md space-y-4">
             <h3 className="text-lg font-bold text-amber-900 flex items-center gap-2">
@@ -301,7 +295,6 @@ export default function App() {
           </div>
         )}
 
-        {/* Catalog Grid Section */}
         <div className="space-y-4">
           <h3 className="text-xl font-bold text-gray-800 border-b pb-2 flex items-center gap-2">
             💎 {lang === 'English' ? 'Our Exclusive Designs' : 'हमारे विशेष आभूषण डिज़ाइन'}
@@ -343,7 +336,6 @@ export default function App() {
 
       </main>
 
-      {/* Footer */}
       <footer className="bg-amber-900 text-white text-center py-6 mt-12 text-sm space-y-1">
         <p>© S.K. Jewellers, नेहला (फतेहाबाद)</p>
         <p className="text-amber-200 text-xs">✨ शुद्धता, पक्का बिल और ग्राहकों का अटूट विश्वास ✨</p>

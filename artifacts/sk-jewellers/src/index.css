@@ -2,59 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 📱 प्योर व्हाइट बैकग्राउंड */
 body, html, #root, .app-container {
   background-color: #ffffff !important;
   color: #111827 !important;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
+/* 👑 सुनहरी मुख्य हेडिंग */
 h1, .main-heading {
   color: #b45309 !important;
-  text-shadow: 0px 1px 2px rgba(180, 83, 9, 0.2) !important;
+  font-weight: 800 !important;
 }
 
+/* 💎 नर्सरी ऐप जैसे कड़क, बड़े और रंगीन बटन */
 button, .btn, [role="button"] {
-  padding: 14px 28px !important;
+  padding: 12px 24px !important;
   font-size: 16px !important;
   font-weight: 700 !important;
   border-radius: 12px !important;
-  min-height: 50px !important;
+  min-height: 48px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  box-shadow: 0 4px 10px rgba(180, 83, 9, 0.15) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
   transition: all 0.2s ease-in-out !important;
   color: #ffffff !important;
-  border: 1px solid rgba(217, 119, 6, 0.3) !important;
+  border: none !important;
+  text-transform: none !important;
 }
 
 button:hover, .btn:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 12px 20px rgba(180, 83, 9, 0.3) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15) !important;
+  filter: brightness(1.1) !important;
 }
 
-button:contains("ज्वेलरी"), button:contains("Jewellery"), button:contains("catalogue"), [class*="view"] {
-  background: linear-gradient(135deg, #781a1a, #991b1b) !important;
-  border: 1px solid #f59e0b !important;
+/* 🎨 ऐक्शन के हिसाब से बटनों के कड़क कलर्स */
+button[class*="green"], [class*="whatsapp"], button:contains("WhatsApp") {
+  background: #22c55e !important; /* कड़क व्हाट्सएप ग्रीन */
+}
+button[class*="blue"], [class*="call"], button:contains("Call"), button:contains("कॉल") {
+  background: #1e40af !important; /* रॉयल ब्लू */
+}
+button[class*="orange"], [class*="order"], button:contains("Order"), button:contains("आर्डर") {
+  background: #f97316 !important; /* कड़क संतरी */
+}
+button[class*="purple"], [class*="view"], button:contains("Jewellery"), button:contains("ज्वेलरी") {
+  background: #7e22ce !important; /* लग्जरी पर्पल कैटलॉग */
+}
+button[class*="admin"], button:contains("Save"), button:contains("सेव") {
+  background: #16a34a !important; /* रिकॉर्ड सेव ग्रीन */
 }
 
-button:contains("कॉल"), button:contains("Call"), [class*="call"], [class*="phone"] {
-  background: linear-gradient(135deg, #0f172a, #1e3a8a) !important;
-}
-
-button:contains("WhatsApp"), button:contains("whatsapp"), [class*="whatsapp"] {
-  background: linear-gradient(135deg, #15803d, #16a34a) !important;
-}
-
-button:contains("आर्डर"), button:contains("Order"), [class*="order"], [class*="cart"] {
-  background: linear-gradient(135deg, #d97706, #b45309) !important;
-}
-
+/* 📱 प्रीमियम इनपुट बॉक्सेस */
 input, select, textarea {
   padding: 12px 16px !important;
   font-size: 16px !important;
   border-radius: 10px !important;
-  border: 1px solid #d97706 !important;
-  background-color: #fffaf0 !important;
+  border: 1px solid #d1d5db !important;
+  background-color: #ffffff !important;
+}
+input:focus, select:focus {
+  border-color: #b45309 !important;
+  outline: none !important;
 }

@@ -175,9 +175,9 @@ export default function App() {
       {viewMode === 'home' && (
         <div className="p-4 max-w-md mx-auto space-y-6">
           <div className="bg-white p-6 rounded-3xl shadow-md border border-amber-200 text-center space-y-4">
-            <h2 className="text-lg font-black text-amber-950">जी आर्यां नूं देवस्टे ऐस.के. ज्वैलर्स</h2>
+            <h2 className="text-lg font-black text-amber-950">👋 नमस्कार दोस्तों, स्वागत है आपका अपनी एस.के. ज्वैलर्स शॉप, नेहला में! ✨</h2>
             <p className="text-xs text-gray-600 leading-relaxed font-medium">
-              हमारे यहाँ शुद्ध सोने और चांदी के हॉलमार्क आभूषण, फैंसी रिंग, नेकलेस और कंगन उचित मूल्य पर उपलब्ध हैं।
+              सच्चा सोना, पक्का बिल और बेमिसाल डिज़ाइन – जहाँ आपका विश्वास ही हमारी असली पहचान है।
             </p>
             <div className="flex justify-center gap-3 pt-2">
               <a href={`tel:${CONTACT_NUMBER}`} className="bg-amber-950 text-white px-5 py-3 rounded-2xl text-xs font-black shadow flex items-center gap-1.5">📞 कॉल करें</a>

@@ -2,20 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ✨ सुनार के आलीशान शोरूम जैसी प्योर व्हाइट और गोल्ड थीम */
 body, html, #root, .app-container {
   background-color: #ffffff !important;
   color: #111827 !important;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* 👑 मुख्य हेडिंग और स्वागत पट्टी को सुनहरी चमक देना */
 h1, .main-heading {
-  color: #b45309 !important; /* गहरा सुनहरी रंग */
+  color: #b45309 !important;
   text-shadow: 0px 1px 2px rgba(180, 83, 9, 0.2) !important;
 }
 
-/* 💎 बटनों का बेस डिज़ाइन - आलीशान सुनार लुक (लग्जरी बॉर्डर्स और राउंडेड कॉर्नर्स) */
 button, .btn, [role="button"] {
   padding: 14px 28px !important;
   font-size: 16px !important;
@@ -35,38 +32,29 @@ button, .btn, [role="button"] {
 button:hover, .btn:hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 12px 20px rgba(180, 83, 9, 0.3) !important;
-  filter: brightness(1.1) !important;
 }
 
-/* 🎨 ज्वेलरी शोरूम के हिसाब से बटनों के लग्जरी कलर्स */
-
-/* View Jewellery / कैटलॉग देखें (शाही वेलवेट मैरून और गोल्ड मिक्स) */
 button:contains("ज्वेलरी"), button:contains("Jewellery"), button:contains("catalogue"), [class*="view"] {
   background: linear-gradient(135deg, #781a1a, #991b1b) !important;
-  border: 1px solid #f59e0b !important; /* गोल्ड बॉर्डर */
+  border: 1px solid #f59e0b !important;
 }
 
-/* Call / कॉल करें (प्रीमियम रॉयल ब्लू) */
 button:contains("कॉल"), button:contains("Call"), [class*="call"], [class*="phone"] {
   background: linear-gradient(135deg, #0f172a, #1e3a8a) !important;
 }
 
-/* WhatsApp / वॉट्सऐप (चमकीला लग्जरी ग्रीन) */
 button:contains("WhatsApp"), button:contains("whatsapp"), [class*="whatsapp"] {
   background: linear-gradient(135deg, #15803d, #16a34a) !important;
 }
 
-/* Order / आर्डर नाऊ (प्रीमियम मैटेलिक गोल्ड-ऑरेंज ग्रैडिएंट) */
 button:contains("आर्डर"), button:contains("Order"), [class*="order"], [class*="cart"] {
   background: linear-gradient(135deg, #d97706, #b45309) !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
-/* 📱 इनपुट बॉक्स और ड्रॉपडाउन को भी लग्जरी टच */
 input, select, textarea {
   padding: 12px 16px !important;
   font-size: 16px !important;
   border-radius: 10px !important;
-  border: 1px solid #d97706 !important; /* गोल्ड थीम बॉर्डर */
-  background-color: #fffaf0 !important; /* हल्का सा क्रीमी व्हाइट ताकि ज्वेलरी रिच लगे */
+  border: 1px solid #d97706 !important;
+  background-color: #fffaf0 !important;
 }

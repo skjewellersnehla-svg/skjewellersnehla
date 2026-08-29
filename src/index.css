@@ -2,34 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* 📱 पूरे प्रोजेक्ट का बैकग्राउंड नर्सरी ऐप जैसा प्योर व्हाइट */
+body, html, #root, .app-container {
   background-color: #ffffff !important;
-  color: #111827;
+  color: #111827 !important;
   font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* 💎 प्रीमियम और बड़े बटन स्टाइल - ऑल इन वन */
-button, .btn, input[type="button"], input[type="submit"] {
+/* 💎 बटनों का बेस प्रीमियम डिज़ाइन (बड़ा साइज और शैडो) */
+button, .btn, [role="button"] {
   padding: 14px 28px !important;
-  font-size: 18px !important;
+  font-size: 16px !important;
   font-weight: 700 !important;
   border-radius: 12px !important;
-  min-height: 52px !important;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  min-height: 50px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15) !important;
   transition: all 0.2s ease-in-out !important;
+  color: #ffffff !important;
+  border: none !important;
 }
 
 button:hover, .btn:hover {
   transform: translateY(-2px) !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-  filter: brightness(1.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2) !important;
+  filter: brightness(1.15) !important;
 }
 
-/* 📱 इनपुट बॉक्स और ड्रापडाउन को भी प्रीमियम लुक */
-input, select, textarea {
-  padding: 12px 16px !important;
-  font-size: 16px !important;
-  border-radius: 10px !important;
-  border: 1px solid #d1d5db !important;
+/* 🎨 हर एक बटन का अलग और चमकदार प्रीमियम कलर */
+
+/* Call / कॉल करें बटन */
+button:contains("कॉल"), button:contains("Call"), [class*="call"], [class*="phone"] {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important;
+}
+
+/* WhatsApp / वॉट्सऐप बटन */
+button:contains("WhatsApp"), button:contains("whatsapp"), [class*="whatsapp"], [class*="green"] {
+  background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+}
+
+/* Order / आर्डर नाऊ बटन */
+button:contains("आर्डर"), button:contains("Order"), [class*="order"], [class*="cart"] {
+  background: linear-gradient(135deg, #ea580c, #f97316) !important;
+}
+
+/* View Jewellery / व्यू ज्वेलरी बटन */
+button:contains("ज्वेलरी"), button:contains("Jewellery"), button:contains("catalogue"), [class*="view"] {
+  background: linear-gradient(135deg, #6b21a8, #a855f7) !important;
+}
+
+/* Admin Panel / लॉगिन बटन */
+button:contains("लॉगिन"), button:contains("Admin"), [class*="admin"] {
+  background: linear-gradient(135deg, #374151, #4b5563) !important;
 }
